@@ -5,20 +5,40 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class HorizontalLineChart extends StatelessWidget {
+class TChartData {
+  List<String> xLabels;
+  List<String> yLabels;
+//List<>
+}
+
+class HorizontalLineChart extends StatefulWidget {
   HorizontalLineChart({
     Key key,
     this.xGridNumPoint = 0,
     this.yGridNumPoint = 0,
     @required this.width,
     @required this.height,
-    this.padding = 20,
+    this.paddingTop = 20,
+    this.paddingLeft = 20,
+    this.paddingRight = 20,
+    this.paddingBottom = 20,
     this.backgroundColor = Colors.black12,
+    this.xLabels = const [],
+    this.yLabels = const [],
+    @required this.dataBuilder,
   }) : super(key: key);
+
+  List<String> xLabels;
+  List<String> yLabels;
+  List<LineBarWidget> Function() dataBuilder;
 
   double width;
   double height;
-  double padding;
+
+  double paddingTop;
+  double paddingLeft;
+  double paddingRight;
+  double paddingBottom;
 
   int xGridNumPoint;
   int yGridNumPoint;
@@ -26,18 +46,59 @@ class HorizontalLineChart extends StatelessWidget {
   Color backgroundColor;
 
   @override
+  _HorizontalLineChartState createState() => _HorizontalLineChartState();
+}
+
+class _HorizontalLineChartState extends State<HorizontalLineChart> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _prepareXAxisTextWidget() {
+    List<XAxisTextWidget> xas = [];
+    int len = widget.xLabels.length;
+
+    var each = (widget.width - (widget.paddingLeft + widget.paddingRight)) / (len + 1);
+
+    for (int i = 0; i < len; i++) {
+      var x = each * (i + 1) + widget.paddingLeft;
+      print('x=' + x.toString());
+      xas.add(new XAxisTextWidget(xCd: x, text: widget.xLabels[i]));
+    }
+
+    return xas;
+  }
+
+  _prepareYAxisTextWidget() {
+    List<YAxisTextWidget> yas = [];
+    int len = widget.yLabels.length;
+
+    var each = (widget.height - (widget.paddingTop + widget.paddingBottom)) / (len + 1);
+
+    for (int i = 0; i < len; i++) {
+      var y = each * (i + 1) + widget.paddingBottom;
+      print(y);
+      yas.add(new YAxisTextWidget(yCd: y, text: widget.xLabels[i]));
+    }
+
+    return yas;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double w = width - padding * 2;
-    double h = height - padding * 2;
+    double w = widget.width - (widget.paddingLeft + widget.paddingRight);
+    double h = widget.height - (widget.paddingTop + widget.paddingBottom);
 
     return Container(
-      color: backgroundColor,
-      width: width,
-      height: height,
+      color: widget.backgroundColor,
+      width: widget.width,
+      height: widget.height,
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(padding),
+            padding:
+                EdgeInsets.fromLTRB(widget.paddingLeft, widget.paddingTop, widget.paddingRight, widget.paddingBottom),
             child: Stack(
               children: [
                 CoordinateAxisWidget(
@@ -47,13 +108,18 @@ class HorizontalLineChart extends StatelessWidget {
                 XGridPainterWidget(
                   width: w,
                   height: h,
-                  numPoint: xGridNumPoint,
+                  numPoint: widget.xGridNumPoint,
                 ),
                 YGridPainterWidget(
                   width: w,
                   height: h,
-                  numPoint: yGridNumPoint,
+                  numPoint: widget.yGridNumPoint,
                 ),
+                (widget.dataBuilder != null && widget.dataBuilder().length > 0)
+                    ? Stack(
+                        children: widget.dataBuilder(), // lst line widget
+                      )
+                    : Center(),
                 LineBarWidget(
                   xBeginCd: 0,
                   xEndCd: 100,
@@ -64,34 +130,29 @@ class HorizontalLineChart extends StatelessWidget {
               ],
             ),
           ),
+          Stack(
+            children: _prepareXAxisTextWidget(),
+          ),
+          Stack(
+            children: _prepareYAxisTextWidget(),
+          )
+
           // XAxisTextWidget(
           //   xCd: 0,
           //   text: 'value',
           // ),
-          Stack(
-            children: [
-              YAxisTextWidget(
-                yCd: 20.0 + (60 * 1),
-                text: '1',
-              ),
-              YAxisTextWidget(
-                yCd: 20.0 + (60 * 2),
-                text: '2',
-              ),
-              YAxisTextWidget(
-                yCd: 20.0 + (60 * 3),
-                text: '3',
-              ),
-              YAxisTextWidget(
-                yCd: 20.0 + (60 * 4),
-                text: '4',
-              ),
-              YAxisTextWidget(
-                yCd: 20.0 + (60 * 5),
-                text: '5',
-              ),
-            ],
-          ),
+          // Stack(
+          //   children: [
+          //     YAxisTextWidget(
+          //       yCd: 20.0 + (60 * 1),
+          //       text: '1',
+          //     ),
+          //     YAxisTextWidget(
+          //       yCd: 20.0 + (60 * 2),
+          //       text: '2',
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -100,10 +161,6 @@ class HorizontalLineChart extends StatelessWidget {
 
 ///=================
 ///
-class TChartData {
-  List<String> xLabels;
-  List<String> yLabels;
-}
 
 //------ Text
 class XAxisTextWidget extends StatelessWidget {
@@ -119,8 +176,10 @@ class XAxisTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double left = max(xCd - fontSize / 2, 0);
+
     return Positioned(
-      left: xCd,
+      left: xCd - text.length * (fontSize / 4),
       bottom: 0,
       child: Container(
         // color: Colors.red,
@@ -365,8 +424,6 @@ class CoordinateAxisPainter extends CustomPainter {
 
     var x = size.width;
     var y = size.height;
-
-    final midY = y / 2;
 
     final pointMode = PointMode.polygon;
     final points = [

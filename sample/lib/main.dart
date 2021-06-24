@@ -31,10 +31,16 @@ class HomePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: HorizontalLineChart(
-          width: maxWidth,
+          width: 320,
           height: 400,
-          xGridNumPoint: 12,
-          yGridNumPoint: 5,
+          paddingLeft: 40,
+          xGridNumPoint: 3,
+          yGridNumPoint: 3,
+          xLabels: ["Aasd", "Bcde", "Cdfe",],
+          yLabels: ["d", "e", "f"],
+          dataBuilder: () {
+            return [];
+          },
         ),
       ),
     );
