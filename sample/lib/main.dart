@@ -35,19 +35,28 @@ class HomePage extends StatelessWidget {
           height: 400,
           paddingLeft: 40,
           paddingBottom: 24,
-          xGridNumPoint: 3,
-          yGridNumPoint: 3,
+          xGridNumPoint: 4,
+          yGridNumPoint: 4,
           xLabels: [
             "7h",
             "8h",
             "9h",
           ],
-          yLabels: ["Máy 1", "Máy 2", "Máy 3"],
+          yLabels: ["Máy 1", "Máy 2", "Máy 3", "4"],
+          chartStyle: TChartStyle(
+              // backgroundColor: Colors.white,
+              // //axisColor: Colors.green,
+              //  axisStrokeWidth: 1.6,
+              // gridColor: Colors.red,
+              // textColor: Colors.yellow,
+              // lineBarColor: Colors.purple,
+              ),
           dataBuilder: () {
             return [
-              [LineBarItem(20, 100), LineBarItem(100, 150)],
+              [LineBarItem(20, 100), LineBarItem(100, 250)],
               [LineBarItem(120, 30)],
-              [LineBarItem(12, 250)],
+              [LineBarItem(12, 15)],
+              [LineBarItem(12, 20)]
             ];
           },
         ),
