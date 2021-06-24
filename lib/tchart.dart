@@ -71,8 +71,24 @@ class HorizontalLineChart extends StatelessWidget {
           Stack(
             children: [
               YAxisTextWidget(
-                yCd: 20.0+(60*1),
-                text: 'value',
+                yCd: 20.0 + (60 * 1),
+                text: '1',
+              ),
+              YAxisTextWidget(
+                yCd: 20.0 + (60 * 2),
+                text: '2',
+              ),
+              YAxisTextWidget(
+                yCd: 20.0 + (60 * 3),
+                text: '3',
+              ),
+              YAxisTextWidget(
+                yCd: 20.0 + (60 * 4),
+                text: '4',
+              ),
+              YAxisTextWidget(
+                yCd: 20.0 + (60 * 5),
+                text: '5',
               ),
             ],
           ),
@@ -134,11 +150,11 @@ class YAxisTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double bottom = max(yCd - fontSize, 0);
+    double bottom = max(yCd - fontSize / 2, 0);
 
     return Positioned(
       left: 0,
-      bottom: yCd,
+      bottom: bottom,
       child: Container(
         // color: Colors.red,
         // width: width,
