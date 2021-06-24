@@ -18,8 +18,7 @@ class XAxisTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double left = max(xCd - fontSize / 2, 0);
-
+    print(xCd);
     return Positioned(
       left: xCd - text.length * (fontSize / 4),
       bottom: 0,
