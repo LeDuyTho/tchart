@@ -34,12 +34,21 @@ class HomePage extends StatelessWidget {
           width: 320,
           height: 400,
           paddingLeft: 40,
+          paddingBottom: 24,
           xGridNumPoint: 3,
           yGridNumPoint: 3,
-          xLabels: ["Aasd", "Bcde", "Cdfe",],
-          yLabels: ["d", "e", "f"],
+          xLabels: [
+            "7h",
+            "8h",
+            "9h",
+          ],
+          yLabels: ["Máy 1", "Máy 2", "Máy 3"],
           dataBuilder: () {
-            return [];
+            return [
+              [LineBarItem(20, 100), LineBarItem(100, 150)],
+              [LineBarItem(120, 30)],
+              [LineBarItem(12, 250)],
+            ];
           },
         ),
       ),

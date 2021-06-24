@@ -11,6 +11,13 @@ class TChartData {
 //List<>
 }
 
+class LineBarItem {
+  double x1;
+  double x2;
+
+  LineBarItem(this.x1, this.x2);
+}
+
 class HorizontalLineChart extends StatefulWidget {
   HorizontalLineChart({
     Key key,
@@ -22,7 +29,7 @@ class HorizontalLineChart extends StatefulWidget {
     this.paddingLeft = 20,
     this.paddingRight = 20,
     this.paddingBottom = 20,
-    this.backgroundColor = Colors.black12,
+    this.backgroundColor = Colors.white,
     this.xLabels = const [],
     this.yLabels = const [],
     @required this.dataBuilder,
@@ -30,7 +37,7 @@ class HorizontalLineChart extends StatefulWidget {
 
   List<String> xLabels;
   List<String> yLabels;
-  List<LineBarWidget> Function() dataBuilder;
+  List<List<LineBarItem>> Function() dataBuilder;
 
   double width;
   double height;
@@ -50,9 +57,30 @@ class HorizontalLineChart extends StatefulWidget {
 }
 
 class _HorizontalLineChartState extends State<HorizontalLineChart> {
+  double w;
+  double h;
+
+  List<double> yGrids = [];
+
   @override
   void initState() {
+    print('End init');
+    w = widget.width - (widget.paddingLeft + widget.paddingRight);
+    h = widget.height - (widget.paddingTop + widget.paddingBottom);
+
+    _calcYGrid();
     super.initState();
+  }
+
+  _calcYGrid() {
+    int len = widget.yLabels.length;
+
+    var each = h / (len + 1);
+
+    for (int i = 0; i < len; i++) {
+      var yGrid = each * (i + 1);
+      yGrids.add(yGrid);
+    }
   }
 
   _prepareXAxisTextWidget() {
@@ -79,17 +107,39 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
     for (int i = 0; i < len; i++) {
       var y = each * (i + 1) + widget.paddingBottom;
       print(y);
-      yas.add(new YAxisTextWidget(yCd: y, text: widget.xLabels[i]));
+      yas.add(new YAxisTextWidget(yCd: y, text: widget.yLabels[i]));
     }
 
     return yas;
   }
 
+  _buildLineBarWidget() {
+    List<LineBarWidget> lineBarItems = [];
+
+    var lst = widget.dataBuilder().reversed.toList();
+
+    for (int i = 0; i < lst.length; i++) {
+      List<LineBarItem> childList = lst[i];
+      for (int j = 0; j < childList.length; j++) {
+        var item = childList[j];
+        lineBarItems.add(new LineBarWidget(
+          xBeginCd: item.x1,
+          xEndCd: item.x2,
+          yCd: yGrids[i],
+          width: w,
+          height: h,
+        ));
+      }
+    }
+
+    return lineBarItems;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double w = widget.width - (widget.paddingLeft + widget.paddingRight);
-    double h = widget.height - (widget.paddingTop + widget.paddingBottom);
-
+    print('Build');
+    int index = 0;
+    print('width=' + w.toString());
     return Container(
       color: widget.backgroundColor,
       width: widget.width,
@@ -117,16 +167,16 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
                 ),
                 (widget.dataBuilder != null && widget.dataBuilder().length > 0)
                     ? Stack(
-                        children: widget.dataBuilder(), // lst line widget
+                        children: _buildLineBarWidget(),
                       )
                     : Center(),
-                LineBarWidget(
-                  xBeginCd: 0,
-                  xEndCd: 100,
-                  yCd: 260 / 3,
-                  width: w,
-                  height: h,
-                ),
+                // LineBarWidget(
+                //   xBeginCd: 0,
+                //   xEndCd: 100,
+                //   yCd: 260 / 3,
+                //   width: w,
+                //   height: h,
+                // ),
               ],
             ),
           ),
@@ -405,6 +455,7 @@ class CoordinateAxisWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(width);
     return Center(
       child: CustomPaint(
         size: Size(width, height),
