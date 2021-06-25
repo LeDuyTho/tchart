@@ -89,8 +89,9 @@ class LineBarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final animationPercent = this.animation.value;
-    print("Painting + ${animationPercent} - ${size}");
+    final animationPercent = //this.animation.value;
+        this.animation.drive(CurveTween(curve: Curves.fastOutSlowIn)).value;
+    //print("Painting + ${animationPercent} - ${size}");
     final path = createAnimatedPath(_drawPath(size), animationPercent);
 
     final paint = Paint()
