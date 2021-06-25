@@ -1,8 +1,9 @@
 //------ Line Bar
 
 import 'package:flutter/material.dart';
+import '../models/animation_path_helpers.dart';
 
-class LineBarWidget extends StatelessWidget {
+class LineBarWidget extends StatefulWidget {
   LineBarWidget({
     @required this.xBeginCd,
     @required this.xEndCd,
@@ -25,11 +26,42 @@ class LineBarWidget extends StatelessWidget {
   Color color;
 
   @override
+  _LineBarWidgetState createState() => _LineBarWidgetState();
+}
+
+class _LineBarWidgetState extends State<LineBarWidget> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  void _startAnimation() {
+    _controller.forward();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _startAnimation();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: CustomPaint(
-        size: Size(width, height),
-        painter: LineBarPainter(xBeginCd: xBeginCd, xEndCd: xEndCd, yCd: yCd, color: color, strokeWidth: strokeWidth),
+        size: Size(widget.width, widget.height),
+        painter: LineBarPainter(
+          xBeginCd: widget.xBeginCd,
+          xEndCd: widget.xEndCd,
+          yCd: widget.yCd,
+          color: widget.color,
+          strokeWidth: widget.strokeWidth,
+          animation: _controller,
+        ),
       ),
     );
   }
@@ -42,7 +74,8 @@ class LineBarPainter extends CustomPainter {
     @required this.yCd,
     @required this.color,
     @required this.strokeWidth,
-  });
+    @required this.animation,
+  }) : super(repaint: animation);
 
   double xBeginCd;
   double xEndCd;
@@ -52,10 +85,16 @@ class LineBarPainter extends CustomPainter {
 
   double strokeWidth;
 
+  Animation<double> animation;
+
   @override
   void paint(Canvas canvas, Size size) {
+    final animationPercent = this.animation.value;
+    print("Painting + ${animationPercent} - ${size}");
+    final path = createAnimatedPath(_drawPath(size), animationPercent);
+
     final paint = Paint()
-      ..style = PaintingStyle.fill
+      ..style = PaintingStyle.stroke //PaintingStyle.fill cho _drawLine
       ..strokeWidth = strokeWidth // = 4
       //..strokeCap = StrokeCap.round
       ..color = color;
@@ -63,6 +102,16 @@ class LineBarPainter extends CustomPainter {
     var x = size.width;
     var y = size.height;
 
+    canvas.drawPath(path, paint);
+  }
+
+  Path _drawPath(Size size) {
+    return Path()
+      ..moveTo(xBeginCd, yCd)
+      ..lineTo(xEndCd, yCd);
+  }
+
+  void _drawLine(Canvas canvas, Paint paint) {
     canvas.drawLine(Offset(xBeginCd, yCd), Offset(xEndCd, yCd), paint);
   }
 

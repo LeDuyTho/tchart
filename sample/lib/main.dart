@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:tchart/tchart.dart';
+import 'package:tchart/drawer/line_bar.dart';
+import 'package:tchart/ztest/animation_belong_draw_path.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: HomePage(), //Ex01(), //
     );
   }
 }
@@ -66,9 +70,35 @@ class HomePage extends StatelessWidget {
                 LineBarItem(40, 80, color: Colors.purple),
               ],
               [LineBarItem(12, 15)],
-              [LineBarItem(12, 20)]
+              [LineBarItem(12, 240)]
             ];
           },
+        ),
+      ),
+    );
+  }
+}
+
+//
+
+class Ex01 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    double maxWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: LineBarWidget(
+          xBeginCd: 10,
+          strokeWidth: 10,
+          color: Colors.red,
+          height: 300,
+          width: 300,
+          xEndCd: 200,
+          yCd: 20,
         ),
       ),
     );
