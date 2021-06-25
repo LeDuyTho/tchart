@@ -37,7 +37,7 @@ class YGridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..style = PaintingStyle.fill
-    //..strokeWidth = 1
+      //..strokeWidth = 1
       ..color = color;
 
     var x = size.width;
@@ -45,7 +45,7 @@ class YGridPainter extends CustomPainter {
 
     var each = y / (numPoint + 1);
 
-    for (int i = 0; i < numPoint; i++) {
+    for (int i = -1; i < numPoint; i++) {
       var yGrid = each * (i + 1);
       canvas.drawLine(Offset(0, yGrid), Offset(x, yGrid), paint);
     }

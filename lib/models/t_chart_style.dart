@@ -5,9 +5,9 @@ class TChartStyle {
     this.backgroundColor = Colors.white,
     this.lineBarColor = Colors.blue,
     this.textColor = Colors.black87,
-    this.gridColor = Colors.black26,
-    this.axisColor = const Color(0xffdddddd), //(0xffccd6eb),
-    this.axisStrokeWidth = 1.6,
+    this.gridColor = const Color(0xffdddddd),
+    this.axisColor = const Color(0xffb3b3b3), //(0xffccd6eb),
+    this.axisStrokeWidth = 1.1,
   });
 
   // màu nền

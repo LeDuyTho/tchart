@@ -32,7 +32,7 @@ class HorizontalLineChart extends StatefulWidget {
 
   List<String> xLabels;
   List<String> yLabels;
-  List<List<LineBarItem>> Function() dataBuilder;
+  List<List<LineBarItem>> Function(List<double> xGrids) dataBuilder;
 
   double width;
   double height;
@@ -55,6 +55,7 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
   double w;
   double h;
 
+  List<double> xGrids = [];
   List<double> yGrids = [];
   TChartStyle chartStyle;
 
@@ -63,6 +64,7 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
     w = widget.width - (widget.paddingLeft + widget.paddingRight);
     h = widget.height - (widget.paddingTop + widget.paddingBottom);
 
+    _calcXGrid();
     _calcYGrid();
 
     super.initState();
@@ -74,6 +76,19 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
     } else {
       chartStyle = widget.chartStyle;
     }
+  }
+
+  _calcXGrid() {
+    int len = widget.xLabels.length;
+
+    var each = w / (len + 1);
+
+    for (int i = 0; i < len; i++) {
+      var xGrid = each * (i + 1);
+      xGrids.add(xGrid);
+    }
+
+    yGrids = yGrids.reversed.toList();
   }
 
   _calcYGrid() {
@@ -128,7 +143,7 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
   _buildLineBarWidget() {
     List<LineBarWidget> lineBarItems = [];
 
-    var lst = widget.dataBuilder();
+    var lst = widget.dataBuilder(xGrids);
 
     for (int i = 0; i < lst.length; i++) {
       List<LineBarItem> childList = lst[i];
@@ -180,7 +195,7 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
                   numPoint: widget.yGridNumPoint,
                   color: chartStyle.gridColor,
                 ),
-                (widget.dataBuilder != null && widget.dataBuilder().length > 0)
+                (widget.dataBuilder != null && widget.dataBuilder(xGrids).length > 0)
                     ? Stack(
                         children: _buildLineBarWidget(),
                       )

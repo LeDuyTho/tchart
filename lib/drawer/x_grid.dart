@@ -45,7 +45,7 @@ class XGridPainter extends CustomPainter {
 
     var each = x / (numPoint + 1);
 
-    for (int i = 0; i < numPoint; i++) {
+    for (int i = 0; i <= numPoint; i++) {
       double xGrid = each * (i + 1);
       canvas.drawLine(Offset(xGrid, y), Offset(xGrid, 0), paint);
     }

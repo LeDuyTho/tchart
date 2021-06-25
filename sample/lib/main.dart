@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
         child: HorizontalLineChart(
           width: maxWidth - 40,
           // subtract real width
-          height: 400,
+          height: maxWidth - 40,
           paddingLeft: 45,
           paddingBottom: 24,
           xGridNumPoint: 8,
@@ -57,10 +57,13 @@ class HomePage extends StatelessWidget {
               // textColor: Colors.yellow,
               // lineBarColor: Colors.purple,
               ),
-          dataBuilder: () {
+          dataBuilder: (xGrids) {
             return [
-              [LineBarItem(20, 100), LineBarItem(100, 250)],
-              [LineBarItem(120, 30)],
+              [LineBarItem(xGrids[0], 0)],
+              [
+                LineBarItem(0, 30),
+                LineBarItem(40, 80),
+              ],
               [LineBarItem(12, 15)],
               [LineBarItem(12, 20)]
             ];
