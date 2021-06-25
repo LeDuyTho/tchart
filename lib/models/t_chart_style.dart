@@ -4,6 +4,7 @@ class TChartStyle {
   TChartStyle({
     this.backgroundColor = Colors.white,
     this.lineBarColor = Colors.blue,
+    this.lineBarStrokeWidth = 4.0,
     this.textColor = Colors.black87,
     this.gridColor = const Color(0xffdddddd),
     this.axisColor = const Color(0xffb3b3b3), //(0xffccd6eb),
@@ -15,6 +16,9 @@ class TChartStyle {
 
   // màu thanh ngang
   Color lineBarColor;
+
+  // độ rộng thanh ngang
+  double lineBarStrokeWidth;
 
   // màu text
   Color textColor;

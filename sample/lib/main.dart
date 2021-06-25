@@ -56,13 +56,14 @@ class HomePage extends StatelessWidget {
               // gridColor: Colors.red,
               // textColor: Colors.yellow,
               // lineBarColor: Colors.purple,
+              //  lineBarStrokeWidth: 5,
               ),
           dataBuilder: (xGrids) {
             return [
-              [LineBarItem(xGrids[0], 0)],
+              [LineBarItem(xGrids[0], 0, color: Colors.red)],
               [
                 LineBarItem(0, 30),
-                LineBarItem(40, 80),
+                LineBarItem(40, 80, color: Colors.purple),
               ],
               [LineBarItem(12, 15)],
               [LineBarItem(12, 20)]

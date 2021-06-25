@@ -10,6 +10,7 @@ class LineBarWidget extends StatelessWidget {
     @required this.width,
     @required this.height,
     @required this.color,
+    @required this.strokeWidth,
   });
 
   double xBeginCd;
@@ -19,6 +20,8 @@ class LineBarWidget extends StatelessWidget {
   double width;
   double height;
 
+  double strokeWidth;
+
   Color color;
 
   @override
@@ -26,7 +29,7 @@ class LineBarWidget extends StatelessWidget {
     return Center(
       child: CustomPaint(
         size: Size(width, height),
-        painter: LineBarPainter(xBeginCd: xBeginCd, xEndCd: xEndCd, yCd: yCd, color: color),
+        painter: LineBarPainter(xBeginCd: xBeginCd, xEndCd: xEndCd, yCd: yCd, color: color, strokeWidth: strokeWidth),
       ),
     );
   }
@@ -38,6 +41,7 @@ class LineBarPainter extends CustomPainter {
     @required this.xEndCd,
     @required this.yCd,
     @required this.color,
+    @required this.strokeWidth,
   });
 
   double xBeginCd;
@@ -46,12 +50,14 @@ class LineBarPainter extends CustomPainter {
 
   Color color;
 
+  double strokeWidth;
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..style = PaintingStyle.fill
-      ..strokeWidth = 4
-    //..strokeCap = StrokeCap.round
+      ..strokeWidth = strokeWidth // = 4
+      //..strokeCap = StrokeCap.round
       ..color = color;
 
     var x = size.width;

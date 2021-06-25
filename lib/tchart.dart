@@ -140,6 +140,7 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
     return yas;
   }
 
+  ///== Build Line Bar
   _buildLineBarWidget() {
     List<LineBarWidget> lineBarItems = [];
 
@@ -155,7 +156,8 @@ class _HorizontalLineChartState extends State<HorizontalLineChart> {
           yCd: yGrids[i],
           width: w,
           height: h,
-          color: chartStyle.lineBarColor,
+          color: (item.color != null) ? item.color : chartStyle.lineBarColor,
+          strokeWidth: (item.strokeWidth != null) ? item.strokeWidth : chartStyle.lineBarStrokeWidth,
         ));
       }
     }
